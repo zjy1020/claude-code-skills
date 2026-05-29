@@ -1,223 +1,213 @@
 # Claude Code Skills
 
-个人收集和自建的 [Claude Code](https://claude.ai/code) Skills 合集。
+个人收集的 [Claude Code](https://claude.ai/code) Skills，按来源分组管理。
 
-## 什么是 Skill？
+> 共 12 个 Skill · 安装位置: `~/.claude/skills/`
 
-Skill 是 Claude Code 的扩展包，提供特定领域的专业知识、工作流和工具。安装后可通过 `/skill-name` 或自然语言自动触发。
+---
 
-## Skills 列表
+## 目录
 
-| # | Skill | 类型 | 调用方式 | 来源 | Stars | 环境依赖 |
-|---|-------|------|---------|------|-------|---------|
-| 1 | **agent-skill-creator** | 第三方 | `/agent-skill-creator` | [FrancyJGLisboa/agent-skill-creator](https://github.com/FrancyJGLisboa/agent-skill-creator) | 1.2K ⭐ | Python 3, git, curl |
-| 2 | **brainstorming** | 第三方 | `/brainstorming` | [obra/superpowers](https://github.com/obra/superpowers) | 210K ⭐ | 无 |
-| 3 | **concise-response-skill** | 自建 | `/concise-response` | — | — | 无 |
-| 4 | **find-skills** | 官方 | 自然触发 | [vercel-labs/skills](https://github.com/vercel-labs/skills) | 20.4K ⭐ | Node.js 18+ |
-| 5 | **frontend-design** | 官方 | 自然触发 | [anthropics/claude-code](https://github.com/anthropics/claude-code) | 127K ⭐ | 无（官方内置） |
-| 6 | **ui-ux-pro-max** | 第三方 | 自然触发 | [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) | 83.9K ⭐ | Node.js |
-| 7 | **hud-skill** | 自建 | `/hud-skill show`, statusLine | — | — | Python 3, git, curl, Git Bash（Win） |
-| 8 | **test-driven-development** | 第三方 | 自然触发 | [obra/superpowers](https://github.com/obra/superpowers) | 210K ⭐ | 无 |
-| 9 | **writing-plans** | 第三方 | 自然触发 | [obra/superpowers](https://github.com/obra/superpowers) | 210K ⭐ | 无 |
-| 9 | **writing-plans** | 第三方 | 自然触发 | [obra/superpowers](https://github.com/obra/superpowers) | 210K ⭐ | 无 |
-| 10 | **executing-plans** | 第三方 | 自然触发 | [obra/superpowers](https://github.com/obra/superpowers) | 210K ⭐ | 无 |
-| 11 | **verification-before-completion** | 第三方 | 自然触发 | [obra/superpowers](https://github.com/obra/superpowers) | 210K ⭐ | 无 |
-| 12 | **systematic-debugging** | 第三方 | 自然触发 | [obra/superpowers](https://github.com/obra/superpowers) | 210K ⭐ | 无 |
+- [一、Superpowers 工作流套件](#一superpowers-工作流套件)
+- [二、Dynamous 技能工厂](#二dynamous-技能工厂)
+- [三、其他独立 Skill](#三其他独立-skill)
+- [四、缺失的 Superpowers 依赖](#四缺失的-superpowers-依赖)
 
-## 各 Skill 详细介绍
+---
 
-### 1. agent-skill-creator — Skill 自动创建工厂
+## 一、Superpowers 工作流套件
 
-- **命令**: `/agent-skill-creator`
-- **仓库**: [FrancyJGLisboa/agent-skill-creator](https://github.com/FrancyJGLisboa/agent-skill-creator)
-- **环境依赖**: Python 3, git, curl（天气/语录 API）
-- **安装**: 21K
-- **说明**: 跨平台 agent skill 的"暗工厂"。输入工作流描述、文档、链接、代码等素材，自动产出完整的、生产可用的 skill。用户只需要提供原始材料，不需要写代码、填模板或了解 skill 规范。
+来源: [obra/superpowers](https://github.com/obra/superpowers) · 210K ⭐
 
-**示例：**
+覆盖需求探索 → 写计划 → TDD 编码 → 计划执行 → 验证 → 调试的完整闭环。
+
+### 工作流关系
+
 ```
-/agent-skill-creator 我每周要拉销售数据、清洗、生成报表
-/agent-skill-creator https://wiki.internal/deploy-runbook
+brainstorming ──→ writing-plans ──→ test-driven-development
+       │                                │
+       │                                ▼
+       │                      executing-plans
+       │                         │   │   │
+       │                         │   │   └─→ finishing-a-development-branch*
+       │                         │   └─────→ using-git-worktrees*
+       │                         └─────────→ subagent-driven-development*
+       ▼
+systematic-debugging ──→ test-driven-development
+       │
+       └───────────────→ verification-before-completion
 ```
 
----
-
-### 2. brainstorming — 头脑风暴/设计探讨
-
-- **命令**: `/brainstorming`
-- **仓库**: [obra/superpowers](https://github.com/obra/superpowers)
-- **环境依赖**: 无
-- **安装**: 210K+
-- **说明**: 在任何创造性工作之前触发。通过逐一提问帮你理清需求、约束和设计方案，形成设计文档并获得批准后才开始编码。
-
-**核心流程：**
-1. 探索项目上下文
-2. 逐一提问澄清需求
-3. 提出 2-3 种方案及推荐
-4. 分块展示设计并获批准
-5. 保存设计文档到 `docs/superpowers/specs/`
+> `*` 标记的为未安装的依赖 skill
 
 ---
 
-### 3. concise-response-skill — 精简回复
+### 1. brainstorming
 
-- **命令**: `/concise-response`
-- **仓库**: 自建
-- **环境依赖**: 无
-- **说明**: 精简 Claude 的回复，减少 token 浪费。去除客套话、前缀废话、元评论、重复问题等冗余内容。
+| 项目 | 内容 |
+|------|------|
+| **调用** | `/brainstorming` 或自然语言 |
+| **触发** | 任何创造性工作前自动触发 |
+| **后继** | → `writing-plans` |
 
-**核心规则：**
-- 不说"好的、当然、不客气、我来、让我"等客套前缀
-- 不重复用户问题
-- 一句话能说完不说两句
-- 最小化 tool 调用
+9 步流程：探索上下文 → 逐一澄清需求 → 提 2-3 方案 → 分块获批准 → 写设计文档 → 自审 → 用户审核 → 转 writing-plans
 
 ---
 
-### 4. find-skills — Skill 搜索工具
+### 2. writing-plans
 
-- **命令**: 自然触发（"找一个能 X 的 skill"）
-- **仓库**: [vercel-labs/skills](https://github.com/vercel-labs/skills)
-- **环境依赖**: Node.js 18+
-- **安装**: 20.4K+
-- **说明**: 搜索和发现 open agent skills 生态中的可用 skill。当用户询问是否有某个功能的 skill 时自动触发。
+| 项目 | 内容 |
+|------|------|
+| **调用** | 自然触发（有 spec 需要实施时） |
+| **后继** | → `executing-plans` / `subagent-driven-development` |
 
-**搜索方式：**
+产出 bite-sized 实施计划：scope check → 文件结构映射 → 每步 2-5 分钟的任务分解。输出到 `docs/superpowers/plans/`。
+
+---
+
+### 3. test-driven-development
+
+| 项目 | 内容 |
+|------|------|
+| **调用** | 自然触发（实现功能 / bugfix 前） |
+| **配套** | `testing-anti-patterns.md` |
+
+**Red-Green-Refactor 流程：**
+1. **RED** — 写最小失败测试
+2. **Verify RED** — 确认因"功能缺失"而失败
+3. **GREEN** — 最简代码通过
+4. **Verify GREEN** — 本测试 + 其他测试通过
+5. **REFACTOR** — 保持绿色清理代码
+
+**铁律:** `NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST`
+
+---
+
+### 4. executing-plans
+
+| 项目 | 内容 |
+|------|------|
+| **调用** | 自然触发（有写好的计划要执行时） |
+| **依赖** | `using-git-worktrees`* · `finishing-a-development-branch`* · `subagent-driven-development`* |
+
+三步流程：加载审查计划 → 逐任务执行 → 调用收尾 skill。遇阻塞立即停止询问。
+
+---
+
+### 5. verification-before-completion
+
+| 项目 | 内容 |
+|------|------|
+| **调用** | 自然触发（声称"做完了/修好了/通过了"时） |
+
+**核心:** "Evidence before claims, always" — 任何完成/成功声明都强制先跑验证。
+
+---
+
+### 6. systematic-debugging
+
+| 项目 | 内容 |
+|------|------|
+| **调用** | 自然触发（遇 bug / 测试失败 / 异常时） |
+| **依赖** | `test-driven-development` · `verification-before-completion` |
+
+4 阶段：根因分析 → 模式分析 → 假设验证 → 修复实现（≥3 次失败则质疑架构）。
+
+配套: `root-cause-tracing.md` · `defense-in-depth.md` · `condition-based-waiting.md`
+
+---
+
+## 二、Dynamous 技能工厂
+
+### agent-skill-creator
+
+| 项目 | 内容 |
+|------|------|
+| **调用** | `/agent-skill-creator <描述>` |
+| **来源** | [FrancyJGLisboa/agent-skill-creator](https://github.com/FrancyJGLisboa/agent-skill-creator) · 1.2K ⭐ |
+| **依赖** | Python 3, git, curl |
+
+Level 5 暗工厂 — 从原始素材自动产出跨平台 skill。5 阶段管线：Discovery → Design → Architecture → Detection → Implementation。
+
+---
+
+## 三、其他独立 Skill
+
+### concise-response-skill
+
+| 项目 | 内容 |
+|------|------|
+| **调用** | `/concise-response` |
+| **来源** | 自建 |
+
+极致省 token：无客套 · 无前缀 · 无元评论 · 不重复问题 · 最小 tool 调用
+
+### find-skills
+
+| 项目 | 内容 |
+|------|------|
+| **调用** | 自然语言（"找一个能做 X 的 skill"） |
+| **来源** | [vercel-labs/skills](https://github.com/vercel-labs/skills) · 20.4K ⭐ |
+| **依赖** | Node.js 18+ |
+
 ```bash
 npx skills find <关键词>
 ```
 
-**示例：**
-```bash
-npx skills find ppt
-npx skills find git
-npx skills find react testing
-```
+### frontend-design
+
+| 项目 | 内容 |
+|------|------|
+| **调用** | 自然触发（前端任务） |
+| **来源** | anthropics/claude-code 内置 · 127K ⭐ |
+
+追求独特美学方向，避免 AI 模板感。支持 HTML/CSS/JS、React、Vue 等。
+
+### ui-ux-pro-max
+
+| 项目 | 内容 |
+|------|------|
+| **调用** | 自然触发（UI/UX 设计任务） |
+| **来源** | [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill) · 83.9K ⭐ |
+
+50+ 样式 · 161 配色 · 57 字体 · 99 UX 指南 · 25 图表 · 10 技术栈
+
+### hud-skill
+
+| 项目 | 内容 |
+|------|------|
+| **调用** | `/hud-skill [show\|line\|quote]` |
+| **来源** | 自建 |
+| **依赖** | Python 3, git, curl, Git Bash(Win) |
+
+底部 HUD 状态栏：CPU/内存/磁盘/温度/天气/Git/时间/中文语录
 
 ---
 
-### 5. frontend-design — 前端界面设计
+## 四、缺失的 Superpowers 依赖
 
-- **命令**: 自然触发（前端相关任务）
-- **仓库**: [anthropics/claude-code](https://github.com/anthropics/claude-code)（官方内置）
-- **环境依赖**: 无（官方内置）
-- **说明**: 创建高质量、有独特美学风格的前端界面。避免千篇一律的 AI 风格，注重排版、配色、视觉细节。支持 HTML/CSS/JS、React、Vue 等框架。
+以下 7 个 skill 存在于 `obra/superpowers` 但尚未安装，部分被已安装 skill 引用：
 
-**设计理念：**
-- 先确定大胆的美学方向（极简/极繁/复古/未来等）
-- 精选独特字体搭配，避免泛用字体
-- 注重排版层次、留白、交互细节
-
----
-
-### 6. ui-ux-pro-max — UI/UX 设计系统
-
-- **命令**: 自然触发（UI/UX 设计相关任务）
-- **仓库**: [nextlevelbuilder/ui-ux-pro-max-skill](https://github.com/nextlevelbuilder/ui-ux-pro-max-skill)
-- **环境依赖**: Node.js（可选 shadcn/ui MCP）
-- **安装**: 83.9K+
-- **说明**: 综合性 UI/UX 设计系统，内置大量设计资源和指南。
-
-**覆盖范围：**
-- 50+ 设计样式：glassmorphism, minimalism, brutalism, neumorphism, bento grid, dark mode 等
-- 161 配色方案、57 字体配对、99 UX 指南、25 图表类型
-- 10 种技术栈：React, Next.js, Vue, Svelte, SwiftUI, Flutter, Tailwind, shadcn/ui 等
-
----
-
-### 7. hud-skill — 系统状态 HUD 面板
-
-- **命令**: `/hud-skill show`, `/hud-skill line`
-- **仓库**: 自建
-- **环境依赖**: Python 3, git, curl, Windows 需 Git Bash
-- **说明**: Claude Code 底部的常驻 HUD 状态栏，显示系统信息（CPU、内存、磁盘、温度）、天气、Git 分支、随机中文语录。支持三行彩色面板和单行 statusLine 模式，所有数据实时刷新。
-
-**显示内容：**
-- 模型名、上下文进度条、系统信息
-- CPU 负载、内存/磁盘使用率
-- 天气状况（中文翻译）、Git 分支状态
-- 随机中文语录（彩虹逐字着色，每 2 分钟刷新）
-- 支持 Windows 和 Linux 双平台
-
----
-
-### 8. test-driven-development — 测试驱动开发
-
-- **命令**: 自然触发（实现功能或 bugfix 前）
-- **仓库**: [obra/superpowers](https://github.com/obra/superpowers)
-- **环境依赖**: 无
-- **说明**: 严格 Red-Green-Refactor TDD 流程。先写失败测试 → 验证失败原因 → 最简代码通过 → 重构。配套 `testing-anti-patterns.md` 覆盖 5 种常见测试反模式。
-
-**核心原则：** "NO PRODUCTION CODE WITHOUT A FAILING TEST FIRST" — 没看到测试失败就不算 TDD。
-
-**流程：**
-1. **RED** — 写一个最小失败测试
-2. **Verify RED** — 确认测试因"功能缺失"而失败（不是 typo）
-3. **GREEN** — 最简代码通过测试
-4. **Verify GREEN** — 确认通过且不影响其他测试
-5. **REFACTOR** — 保持绿色前提下清理代码
-
----
-
-### 9. writing-plans — 实施计划生成
-
-- **命令**: 自然触发
-- **仓库**: [obra/superpowers](https://github.com/obra/superpowers)
-- **环境依赖**: 无
-- **说明**: 有设计文档或需求时自动触发，生成详细的实施计划。包含涉及的文件清单、代码编写步骤、测试方案，假设开发者对代码库零上下文，记录所有需要的信息。
-
-**核心原则：** DRY、YAGNI、TDD、频繁提交。将计划拆分为可执行的小任务。
-
----
-
-### 10. executing-plans — 计划执行引擎
-
-- **命令**: 自然触发
-- **仓库**: [obra/superpowers](https://github.com/obra/superpowers)
-- **环境依赖**: 无（子 agent 功能需 Claude Code 或 Codex）
-- **说明**: 加载已写好的实施计划，审查后按 task 顺序执行。每一步完成后设置审查 checkpoint，确保质量。支持派生子 agent 并行执行任务。
-
----
-
-### 11. verification-before-completion — 完成前验证
-
-- **命令**: 自然触发
-- **仓库**: [obra/superpowers](https://github.com/obra/superpowers)
-- **环境依赖**: 无
-- **说明**: 在声称工作完成之前强制运行验证。当你计划说"做完了""修好了""通过了"时自动触发，要求先运行验证命令并确认输出结果。
-
-**核心原则：** "证据优先于断言"——违反字面规定就是违反精神。
-
----
-
-### 12. systematic-debugging — 系统化调试
-
-- **命令**: 自然触发
-- **仓库**: [obra/superpowers](https://github.com/obra/superpowers)
-- **环境依赖**: 无
-- **说明**: 遇到 bug、测试失败或非预期行为时自动触发。按系统化流程排查问题，避免随机试错。
-
-**调试流程：** 收集错误信息（日志、堆栈、截图）→ 提出复现假设 → 二分法缩小范围 → 确定根因 → 修复并验证。
+| Skill | 被谁依赖 | 用途 |
+|-------|---------|------|
+| subagent-driven-development | executing-plans, writing-plans | 子 agent 并行执行任务 |
+| finishing-a-development-branch | executing-plans | 开发分支收尾 |
+| using-git-worktrees | executing-plans | 隔离工作区 |
+| dispatching-parallel-agents | — | 多 agent 并行调度 |
+| receiving-code-review | — | 接收 code review |
+| requesting-code-review | — | 发起 code review |
+| using-superpowers | — | 套件引导页 |
 
 ---
 
 ## 安装方法
 
-所有 skill 文件位于 `skills/` 目录下。安装方式：
-
-### 方式一：直接复制
 ```bash
-# Claude Code
-cp -r skills/<skill-name> ~/.claude/skills/<skill-name>
+# 1. 从本仓库复制到全局
+cp -r skills/<skill-name> ~/.claude/skills/
 
-# 全局安装（支持 Codex, Cursor, Kiro 等）
-cp -r skills/<skill-name> ~/.agents/skills/<skill-name>
-```
-
-### 方式二：通过 npx skills 安装
-```bash
-# 从 GitHub 仓库安装
-npx skills add <仓库地址> --skill <skill-name>
+# 2. 或从 GitHub 直接安装
+npx skills add https://github.com/zjy1020/claude-code-skills --skill <skill-name>
 ```
 
 ## License
