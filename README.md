@@ -184,7 +184,38 @@ npx skills find <关键词>
 
 ---
 
+## 使用场景 / 推荐调用流程
+
+> Skill 虽可自动触发，但显式开启流程更清晰可控。
+> ⚠ 大项目全流程较耗 token，小项目建议用精简版。
+
+### 🏗 大项目（前端/后端/APP/小程序）
+
+```
+/brainstorming
+  ↓  配合 /frontend-design + /ui-ux-pro-max 确定 UI/UX
+/writing-plans
+  ↓
+executing-plans  ── 编码时自动触发 /test-driven-development
+  ↓
+verification-before-completion
+```
+
+### 📐 小项目（简单功能/小需求）
+
+```
+/brainstorming → /writing-plans → executing-plans
+```
+
+### 💬 日常聊天问答 → `/concise-response-skill`
+
+### 🔍 查找 Skill → `/find-skills <关键词>` 或 "找一个能做 X 的 skill"
+
+### 🛠 创建自定义 Skill → `/agent-skill-creator <描述>`
+
 ---
+
+## 安装方法
 
 ```bash
 # 1. 从本仓库复制到全局
@@ -197,3 +228,5 @@ npx skills add https://github.com/zjy1020/claude-code-skills --skill <skill-name
 ## License
 
 MIT
+
+## 安装方法
