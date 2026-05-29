@@ -2,7 +2,7 @@
 
 个人收集的 [Claude Code](https://claude.ai/code) Skills，按来源分组管理。
 
-> 共 12 个 Skill · 安装位置: `~/.claude/skills/`
+> 共 15 个 Skill · 安装位置: `~/.claude/skills/`
 
 ---
 
@@ -11,7 +11,7 @@
 - [一、Superpowers 工作流套件](#一superpowers-工作流套件)
 - [二、Dynamous 技能工厂](#二dynamous-技能工厂)
 - [三、其他独立 Skill](#三其他独立-skill)
-- [四、缺失的 Superpowers 依赖](#四缺失的-superpowers-依赖)
+- [四、安装方法](#安装方法)
 
 ---
 
@@ -29,16 +29,14 @@ brainstorming ──→ writing-plans ──→ test-driven-development
        │                                ▼
        │                      executing-plans
        │                         │   │   │
-       │                         │   │   └─→ finishing-a-development-branch*
-       │                         │   └─────→ using-git-worktrees*
-       │                         └─────────→ subagent-driven-development*
+       │                         │   │   └─→ finishing-a-development-branch
+       │                         │   └─────→ using-git-worktrees
+       │                         └─────────→ subagent-driven-development
        ▼
 systematic-debugging ──→ test-driven-development
        │
        └───────────────→ verification-before-completion
 ```
-
-> `*` 标记的为未安装的依赖 skill
 
 ---
 
@@ -88,7 +86,7 @@ systematic-debugging ──→ test-driven-development
 | 项目 | 内容 |
 |------|------|
 | **调用** | 自然触发（有写好的计划要执行时） |
-| **依赖** | `using-git-worktrees`* · `finishing-a-development-branch`* · `subagent-driven-development`* |
+| **依赖** | `using-git-worktrees` · `finishing-a-development-branch` · `subagent-driven-development` |
 
 三步流程：加载审查计划 → 逐任务执行 → 调用收尾 skill。遇阻塞立即停止询问。
 
@@ -114,6 +112,33 @@ systematic-debugging ──→ test-driven-development
 4 阶段：根因分析 → 模式分析 → 假设验证 → 修复实现（≥3 次失败则质疑架构）。
 
 配套: `root-cause-tracing.md` · `defense-in-depth.md` · `condition-based-waiting.md`
+
+---
+
+### 7. obra-superpowers-subagent-driven-development
+
+| 项目 | 内容 |
+|------|------|
+| **调用** | 自然触发（有实施计划需执行，任务独立可并行时） |
+| **配套** | `implementer-prompt.md` · `spec-reviewer-prompt.md` · `code-quality-reviewer-prompt.md` |
+
+每个独立任务派发全新子 agent，经历实现→自审→Spec Compliance Review→Code Quality Review，通过后才标记完成。与 executing-plans 平替，适合任务耦合度低、需快速迭代的场景。
+
+### 8. using-git-worktrees
+
+| 项目 | 内容 |
+|------|------|
+| **调用** | 自然触发（开始新功能或执行计划前） |
+
+优先检测已有隔离，然后使用平台原生工具（EnterWorktree），最后回退到 `git worktree add`。自动检测依赖并安装，运行基线测试确保工作区干净。
+
+### 9. finishing-a-development-branch
+
+| 项目 | 内容 |
+|------|------|
+| **调用** | 自然触发（实现完成、测试全通过后） |
+
+测试验证 → 环境检测 → 展示选项（合并/PR/保留/丢弃）→ 执行选择 → 清理工作区。仅选项 ①④ 清理 worktree，②③ 保留以便迭代。
 
 ---
 
@@ -188,24 +213,33 @@ npx skills find <关键词>
 
 > Skill 虽可自动触发，但显式开启流程更清晰可控。
 > ⚠ 大项目全流程较耗 token，小项目建议用精简版。
+> ⚠ `/frontend-design` 和 `/ui-ux-pro-max` 必须带上具体需求描述才会生效（如 `/frontend-design 设计一个极简风格的后台`），光写 skill 名不触发。
 
 ### 🏗 大项目（前端/后端/APP/小程序）
 
 ```
-/brainstorming
-  ↓  配合 /frontend-design + /ui-ux-pro-max 确定 UI/UX
-/writing-plans
+/brainstorming                                         ← 唯一手动入口
+  ↓  中如需定制前端风格，在 brainstorming 环节配合：
+      /frontend-design 设计一个[具体描述的前端页面]
+      /ui-ux-pro-max 设计[具体描述的 UI/UX 方案]
+      （必须带具体需求描述才会生效）
   ↓
-executing-plans  ── 编码时自动触发 /test-driven-development
+writing-plans                                          ← 自动触发
   ↓
-verification-before-completion
+executing-plans ─→ using-git-worktrees                 ← 自动触发
+  │ 编码时自动触发 test-driven-development
+  │ 完成后自动触发 finishing-a-development-branch
+  ↓
+verification-before-completion                         ← 自动触发
 ```
 
 ### 📐 小项目（简单功能/小需求）
 
 ```
-/brainstorming → /writing-plans → executing-plans
+/brainstorming → writing-plans → executing-plans
 ```
+
+只需手动 `/brainstorming`，后续自动触发。省 token 版，省略设计验证环节。
 
 ### 💬 日常聊天问答 → `/concise-response-skill`
 
@@ -229,4 +263,3 @@ npx skills add https://github.com/zjy1020/claude-code-skills --skill <skill-name
 
 MIT
 
-## 安装方法
