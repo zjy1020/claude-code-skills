@@ -184,23 +184,7 @@ npx skills find <关键词>
 
 ---
 
-## 四、缺失的 Superpowers 依赖
-
-以下 7 个 skill 存在于 `obra/superpowers` 但尚未安装，部分被已安装 skill 引用：
-
-| Skill | 被谁依赖 | 用途 |
-|-------|---------|------|
-| subagent-driven-development | executing-plans, writing-plans | 子 agent 并行执行任务 |
-| finishing-a-development-branch | executing-plans | 开发分支收尾 |
-| using-git-worktrees | executing-plans | 隔离工作区 |
-| dispatching-parallel-agents | — | 多 agent 并行调度 |
-| receiving-code-review | — | 接收 code review |
-| requesting-code-review | — | 发起 code review |
-| using-superpowers | — | 套件引导页 |
-
 ---
-
-## 安装方法
 
 ```bash
 # 1. 从本仓库复制到全局
