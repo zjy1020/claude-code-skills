@@ -2,7 +2,7 @@
 
 个人收集的 [Claude Code](https://claude.ai/code) Skills，按来源分组管理。
 
-> 共 15 个 Skill · 安装位置: `~/.claude/skills/`
+> 共 16 个 Skill · 安装位置: `~/.claude/skills/`
 
 ---
 
@@ -206,6 +206,25 @@ npx skills find <关键词>
 | **依赖** | Python 3, git, curl, Git Bash(Win) |
 
 底部 HUD 状态栏：CPU/内存/磁盘/温度/天气/Git/时间/中文语录
+
+---
+
+### karpathy-guidelines
+
+| 项目 | 内容 |
+|------|------|
+| **调用** | `/karpathy-guidelines` 或自然触发 |
+| **来源** | [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) |
+| **触发** | 手动调用，推荐编写/审查/重构代码时使用 |
+
+Andrej Karpathy 总结的 LLM 编码指导原则，减少常见 AI 编码错误：
+
+1. **Think Before Coding** — 明确假设，暴露不确定性，不隐藏困惑
+2. **Simplicity First** — 最少代码，无多余抽象，无猜测性功能
+3. **Surgical Changes** — 只动必须动的，不顺手"改良"无关代码
+4. **Goal-Driven Execution** — 定义可验证标准，循环直到通过
+
+**权衡:** 偏向谨慎而非速度，简单任务可用判断力酌情跳过。
 
 ---
 
