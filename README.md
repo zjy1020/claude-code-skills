@@ -2,7 +2,7 @@
 
 个人收集的 [Claude Code](https://claude.ai/code) Skills，按来源分组管理。
 
-> 共 17 个 Skill · 安装位置: `~/.claude/skills/`
+> 共 18 个 Skill · 安装位置: `~/.claude/skills/`
 
 ---
 
@@ -224,6 +224,15 @@ Andrej Karpathy 编码原则：Think Before Coding · Simplicity First · Surgic
 | **来源** | [eze-is/web-access](https://github.com/eze-is/web-access) |
 
 真实浏览器环境操作：搜索、网页抓取、登录后操作、动态渲染页面等。
+
+### exam-review-skill
+
+| 项目 | 内容 |
+|------|------|
+| **调用** | `/exam-review-skill` 或自然语言 |
+| **来源** | 自建 |
+
+大学期末复习问答。解析 txt/docx/pdf 课后题文件，支持选择题/判断题/填空题/问答题四种题型，顺序/打乱/选项打乱多种复习模式，答错详细讲解，结束时可整理错题输出 md 文档。
 ---
 
 ## 使用场景 / 推荐调用流程
